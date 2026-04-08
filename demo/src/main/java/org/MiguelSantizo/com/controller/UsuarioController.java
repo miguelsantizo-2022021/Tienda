@@ -2,14 +2,14 @@ package org.MiguelSantizo.com.controller;
 
 import org.MiguelSantizo.com.entity.Usuario;
 import org.MiguelSantizo.com.service.UsuarioService;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller; // CAMBIADO
+import org.springframework.ui.Model; // NECESARIO PARA HTML
 import org.springframework.web.bind.annotation.*;
-
+import jakarta.servlet.http.HttpSession;
 import java.util.List;
 
-@RestController
-@RequestMapping("/api/usuarios")
+@Controller // CAMBIADO: @RestController NO sirve para HTML
+@RequestMapping("/Usuarios") // Ruta para el navegador
 public class UsuarioController {
 
     private final UsuarioService usuarioService;
@@ -18,42 +18,23 @@ public class UsuarioController {
         this.usuarioService = usuarioService;
     }
 
+    // Método para mostrar la página HTML
     @GetMapping
-    public List<Usuario> getAll() {
-        return usuarioService.getAllUsuarios();
-    }
-
-    @GetMapping("/{id}")
-    public ResponseEntity<Object> getById(@PathVariable Integer id) {
-        Usuario usuario = usuarioService.getUsuarioById(id);
-        if (usuario == null) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body("Error: El usuario con ID " + id + " no existe.");
+    public String listUsuarios(Model model, HttpSession session) {
+        // Protección de sesión
+        if (session.getAttribute("usuarioLogueado") == null) {
+            return "redirect:/Login";
         }
-        return ResponseEntity.ok(usuario);
+
+        List<Usuario> lista = usuarioService.getAllUsuarios();
+        model.addAttribute("listaUsuarios", lista);
+        return "usuarios"; // Esto busca usuarios.html
     }
 
-    @PostMapping
-    public ResponseEntity<Usuario> create(@RequestBody Usuario usuario) {
-        Usuario nuevo = usuarioService.saveUsuario(usuario);
-        return new ResponseEntity<>(nuevo, HttpStatus.CREATED);
-    }
-
-    @PutMapping("/{id}")
-    public ResponseEntity<Object> update(@PathVariable Integer id, @RequestBody Usuario usuario) {
-        Usuario actualizado = usuarioService.updateUsuario(id, usuario);
-        if (actualizado == null) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body("Error: No se pudo actualizar. Usuario no encontrado.");
-        }
-        return ResponseEntity.ok(actualizado);
-    }
-
-    @DeleteMapping("/{id}")
-    public ResponseEntity<String> delete(@PathVariable Integer id) {
-        if (!usuarioService.deleteUsuario(id)) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Error: Usuario no encontrado.");
-        }
-        return ResponseEntity.ok("Usuario eliminado correctamente.");
+    // Método para eliminar y refrescar la página
+    @GetMapping("/eliminar/{id}")
+    public String delete(@PathVariable Integer id) {
+        usuarioService.deleteUsuario(id);
+        return "redirect:/Usuarios";
     }
 }

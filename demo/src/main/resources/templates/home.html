@@ -24,12 +24,21 @@
     </header>
 
     <div class="dashboard-grid">
+
         <div class="card card-clientes">
             <div class="card-icon"><i class="bi bi-people-fill"></i></div>
             <h3>Clientes</h3>
-            <p>Gestiona la base de datos.</p>
+            <p>Gestión de compradores.</p>
             <a th:href="@{/Clientes}" class="card-btn">Ir a Clientes</a>
         </div>
+
+        <div class="card card-usuarios">
+            <div class="card-icon"><i class="bi bi-person-badge"></i></div>
+            <h3>Usuarios</h3>
+            <p>Control de accesos y roles.</p>
+            <a th:href="@{/Usuarios}" class="card-btn">Ir a Usuarios</a>
+        </div>
+
     </div>
 </main>
 </body>

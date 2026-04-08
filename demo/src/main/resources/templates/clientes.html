@@ -19,9 +19,14 @@
 
 <nav class="navbar">
     <div class="nav-container">
-        <span class="logo">Tienda Miguel 🛒</span>
+        <a th:href="@{/Home}" style="text-decoration: none; color: white;">
+            <span class="logo">Tienda Miguel 🛒</span>
+        </a>
+
         <div class="user-info">
-            <a th:href="@{/Home}" style="color: white; text-decoration: none;">Volver al Panel</a>
+            <a th:href="@{/Clientes}" style="color: white; margin-right: 15px;">Clientes</a>
+            <a th:href="@{/Usuarios}" style="color: white; margin-right: 15px;">Usuarios</a>
+            <a th:href="@{/logout}" class="btn-logout">Cerrar Sesión</a>
         </div>
     </div>
 </nav>
