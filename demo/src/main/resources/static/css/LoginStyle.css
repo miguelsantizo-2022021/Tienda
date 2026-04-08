@@ -9,10 +9,12 @@ body {
     align-items: center;
     height: 100vh;
     margin: 0;
+} /* <-- Asegúrate de tener esta llave aquí */
 
 .login-box {
-    /* Si el fondo es oscuro, un blur queda genial con 'transparent' */
     background: rgba(255, 255, 255, 0.2);
+    /* Si el fondo es oscuro, un blur queda genial con 'transparent' */
+
     backdrop-filter: blur(10px); /* Esto hace el efecto de vidrio esmerilado */
     padding: 40px;
     border-radius: 15px;
