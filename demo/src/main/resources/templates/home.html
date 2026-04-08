@@ -25,18 +25,36 @@
 
     <div class="dashboard-grid">
 
-        <div class="card card-clientes">
-            <div class="card-icon"><i class="bi bi-people-fill"></i></div>
-            <h3>Clientes</h3>
-            <p>Gestión de compradores.</p>
-            <a th:href="@{/Clientes}" class="card-btn">Ir a Clientes</a>
-        </div>
+        <div class="dashboard-grid">
 
-        <div class="card card-usuarios">
-            <div class="card-icon"><i class="bi bi-person-badge"></i></div>
-            <h3>Usuarios</h3>
-            <p>Control de accesos y roles.</p>
-            <a th:href="@{/Usuarios}" class="card-btn">Ir a Usuarios</a>
+            <div class="card card-clientes">
+                <div class="card-icon"><i class="bi bi-people-fill"></i></div>
+                <h3>Clientes</h3>
+                <p>Gestión de la base de datos de clientes.</p>
+                <a th:href="@{/Clientes}" class="card-btn">Ir a Clientes</a>
+            </div>
+
+            <div class="card card-usuarios">
+                <div class="card-icon"><i class="bi bi-person-badge"></i></div>
+                <h3>Usuarios</h3>
+                <p>Control de accesos y roles del sistema.</p>
+                <a th:href="@{/Usuarios}" class="card-btn">Ir a Usuarios</a>
+            </div>
+
+            <div class="card card-detalles" style="background-color: #f8f9fa; border: 1px solid #ddd;">
+                <div class="card-icon"><i class="bi bi-cart-check-fill"></i></div>
+                <h3>Detalles de Venta</h3>
+                <p>Ver desglose de productos vendidos.</p>
+                <a th:href="@{/Detalles}" class="card-btn">Ir a Detalles</a>
+            </div>
+
+            <div class="card card-ventas">
+                <div class="card-icon"><i class="bi bi-cash-stack"></i></div>
+                <h3>Ventas</h3>
+                <p>Historial y control de transacciones.</p>
+                <a th:href="@{/Ventas}" class="card-btn">Ir a Ventas</a>
+            </div>
+
         </div>
 
     </div>
