@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Detalle de Ventas - Tienda Miguel</title>
+    <link rel="stylesheet" th:href="@{/css/HomeStyle.css}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+</head>
+<body>
+
+<nav class="navbar">
+    <div class="nav-container">
+        <a th:href="@{/Home}" style="text-decoration: none; color: white;"><span class="logo">Tienda Miguel 🛒</span></a>
+        <div class="user-info">
+            <a th:href="@{/Home}" style="color: white; text-decoration: none;">Volver al Panel</a>
+        </div>
+    </div>
+</nav>
+
+<main class="container" style="max-width: 1200px; margin: 30px auto; padding: 20px;">
+    <h1>Registro de Detalles de Ventas</h1>
+
+    <table style="width: 100%; border-collapse: collapse; background: white; margin-top: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+        <thead>
+        <tr style="background: #2c3e50; color: white; text-align: left;">
+            <th style="padding: 12px;">ID Detalle</th>
+            <th style="padding: 12px;">ID Venta</th>
+            <th style="padding: 12px;">Producto</th>
+            <th style="padding: 12px;">Cantidad</th>
+            <th style="padding: 12px;">Precio Unit.</th>
+            <th style="padding: 12px;">Subtotal</th>
+            <th style="padding: 12px;">Acciones</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="d : ${listaDetalles}" style="border-bottom: 1px solid #ddd;">
+            <td style="padding: 12px;" th:text="${d.idDetalleVenta}"></td>
+            <td style="padding: 12px;" th:text="${d.venta != null ? d.venta.idVenta : 'N/A'}"></td>
+            <td style="padding: 12px;" th:text="${d.producto != null ? d.producto.nombre : 'Sin Producto'}"></td>
+            <td style="padding: 12px;" th:text="${d.cantidad}"></td>
+            <td style="padding: 12px;" th:text="'Q' + ${d.precioUnitario}"></td>
+            <td style="padding: 12px;"><strong th:text="'Q' + ${d.subtotal}"></strong></td>
+            <td style="padding: 12px;">
+                <a th:href="@{/Detalles/eliminar/{id}(id=${d.idDetalleVenta})}"
+                   style="color: #dc3545;" onclick="return confirm('¿Eliminar detalle?')">
+                    <i class="bi bi-trash-fill"></i>
+                </a>
+            </td>
+        </tr>
+        <tr th:if="${#lists.isEmpty(listaDetalles)}">
+            <td colspan="7" style="text-align: center; padding: 20px;">No hay detalles de ventas registrados.</td>
+        </tr>
+        </tbody>
+    </table>
+</main>
+</body>
+</html>
