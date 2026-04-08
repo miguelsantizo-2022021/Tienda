@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Tienda Miguel</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <link rel="stylesheet"
+          href="../static/css/HomeStyle.css"
+          th:href="@{/css/HomeStyle.css}">
+</head>
+<body>
+<nav class="navbar">
+    <div class="nav-container">
+        <span class="logo">Tienda Miguel 🛒</span>
+        <div class="user-info">
+            <span>Bienvenido, <strong th:text="${usuario.username}">User</strong></span>
+            <a th:href="@{/logout}" class="btn-logout">Cerrar Sesión</a>
+        </div>
+    </div>
+</nav>
+
+<main class="container">
+    <header class="welcome-header">
+        <h1>Panel de Administración</h1>
+        <p>Has ingresado como: <span class="badge" th:text="${usuario.rol}">ROL</span></p>
+    </header>
+
+    <div class="dashboard-grid">
+        <div class="card card-clientes">
+            <div class="card-icon">
+                <i class="bi bi-people-fill"></i>
+            </div>
+            <h3>Clientes</h3>
+            <p>Gestiona la base de datos de tus compradores.</p>
+            <a href="#" class="card-btn">Ir a Clientes</a>
+        </div>
+
+        <div class="card card-productos">
+            <div class="card-icon">
+                <i class="bi bi-box-seam-fill"></i>
+            </div>
+            <h3>Productos</h3>
+            <p>Control de inventario, precios y stock actual.</p>
+            <a href="#" class="card-btn">Ir a Productos</a>
+        </div>
+
+        <div class="card card-ventas">
+            <div class="card-icon">
+                <i class="bi bi-cart-check-fill"></i>
+            </div>
+            <h3>Ventas</h3>
+            <p>Registra nuevas ventas y revisa el historial.</p>
+            <a href="#" class="card-btn">Ir a Ventas</a>
+        </div>
+    </div>
+</main>
+</body>
+</html>

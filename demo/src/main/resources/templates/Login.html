@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Login Personalizado</title>
+    <link rel="stylesheet"
+          href="../static/css/LoginStyle.css"
+          th:href="@{/css/LoginStyle.css}">
+</head>
+<body>
+
+<div class="login-box">
+    <h2>Tienda Miguel</h2>
+
+    <div th:if="${error}" class="error-msg" th:text="${error}"></div>
+
+    <form th:action="@{/Login}" method="post">
+        <div class="campo">
+            <label>Usuario:</label>
+            <input type="text" name="username" required>
+        </div>
+
+        <div class="campo">
+            <label>Contraseña:</label>
+            <input type="password" name="password" required>
+        </div>
+
+        <button type="submit">Ingresar</button>
+    </form>
+</div>
+
+</body>
+</html>
