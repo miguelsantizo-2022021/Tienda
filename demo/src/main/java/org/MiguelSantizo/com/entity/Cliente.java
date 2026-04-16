@@ -10,7 +10,7 @@ public class Cliente {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id_cliente") // Actualizado según el nuevo script
+    @Column(name = "id_cliente")
     private Integer idCliente;
 
     @NotBlank(message = "El nombre del cliente es obligatorio")
@@ -31,7 +31,7 @@ public class Cliente {
     public Cliente() {
     }
 
-    // Getters y Setters Actualizados
+
     public Integer getIdCliente() {
         return idCliente;
     }

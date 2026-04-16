@@ -9,13 +9,11 @@ body {
     align-items: center;
     height: 100vh;
     margin: 0;
-} /* <-- Asegúrate de tener esta llave aquí */
+}
 
 .login-box {
     background: rgba(255, 255, 255, 0.2);
-    /* Si el fondo es oscuro, un blur queda genial con 'transparent' */
-
-    backdrop-filter: blur(10px); /* Esto hace el efecto de vidrio esmerilado */
+    backdrop-filter: blur(10px);
     padding: 40px;
     border-radius: 15px;
     border: 1px solid rgba(255, 255, 255, 0.3);
@@ -25,14 +23,14 @@ body {
 
 h2 {
     text-align: center;
-    color: #ffffff; /* Cambié a blanco para que resalte sobre fondos oscuros */
+    color: #ffffff;
     text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
 }
 
 label {
     display: block;
     margin-bottom: 5px;
-    color: white; /* Para que se lea sobre el fondo */
+    color: white;
     font-weight: bold;
 }
 
@@ -41,7 +39,7 @@ input {
     padding: 10px;
     border: 1px solid #ccc;
     border-radius: 5px;
-    box-sizing: border-box; /* Importante para que el padding no sature el ancho */
+    box-sizing: border-box;
 }
 
 button {
