@@ -5,8 +5,10 @@ import org.MiguelSantizo.com.service.VentaService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import jakarta.servlet.http.HttpSession;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/Ventas")
@@ -19,17 +21,28 @@ public class VentaController {
     }
 
     @GetMapping
-    public String listVentas(Model model, HttpSession session) {
-        if (session.getAttribute("usuarioLogueado") == null) return "redirect:/Login";
+    public String listar(@RequestParam(required = false) String buscar, Model model) {
+        List<Venta> ventas = ventaService.getAllVentas();
 
-        List<Venta> lista = ventaService.getAllVentas();
-        model.addAttribute("listaVentas", lista);
-        return "ventas"; // Buscará ventas.html en templates
+        if (buscar != null && !buscar.isEmpty()) {
+            ventas = ventas.stream()
+                    .filter(v -> v.getCliente() != null &&
+                            v.getCliente().getNombre().toLowerCase().contains(buscar.toLowerCase()))
+                    .collect(Collectors.toList());
+        }
+
+        model.addAttribute("listaVentas", ventas);
+        return "ventas";
     }
 
     @GetMapping("/eliminar/{id}")
-    public String delete(@PathVariable Integer id) {
-        ventaService.deleteVenta(id);
+    public String eliminar(@PathVariable Integer id, RedirectAttributes redirectAttrs) {
+        try {
+            ventaService.deleteVenta(id);
+            redirectAttrs.addFlashAttribute("success", "Registro de venta eliminado.");
+        } catch (Exception e) {
+            redirectAttrs.addFlashAttribute("error", "Error al eliminar la venta.");
+        }
         return "redirect:/Ventas";
     }
 }

@@ -5,8 +5,10 @@ import org.MiguelSantizo.com.service.ProductoService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import jakarta.servlet.http.HttpSession;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/Productos")
@@ -19,17 +21,34 @@ public class ProductoController {
     }
 
     @GetMapping
-    public String listProductos(Model model, HttpSession session) {
-        if (session.getAttribute("usuarioLogueado") == null) return "redirect:/Login";
+    public String listar(@RequestParam(required = false) String buscar, Model model) {
+        List<Producto> productos = productoService.getAllProductos();
 
-        List<Producto> lista = productoService.getAllProductos();
-        model.addAttribute("listaProductos", lista);
-        return "productos"; // Busca productos.html
+        if (buscar != null && !buscar.isEmpty()) {
+            productos = productos.stream()
+                    .filter(p -> p.getNombreProducto().toLowerCase().contains(buscar.toLowerCase()))
+                    .collect(Collectors.toList());
+        }
+
+        model.addAttribute("listaProductos", productos);
+        model.addAttribute("productoObj", new Producto());
+        return "productos";
+    }
+
+    @PostMapping("/guardar")
+    public String guardar(@ModelAttribute("productoObj") Producto producto) {
+        productoService.saveProducto(producto);
+        return "redirect:/Productos";
     }
 
     @GetMapping("/eliminar/{id}")
-    public String delete(@PathVariable Integer id) {
-        productoService.deleteProducto(id);
+    public String eliminar(@PathVariable Integer id, RedirectAttributes redirectAttrs) {
+        try {
+            productoService.deleteProducto(id);
+            redirectAttrs.addFlashAttribute("success", "Producto eliminado.");
+        } catch (Exception e) {
+            redirectAttrs.addFlashAttribute("error", "No se puede eliminar: El producto está en detalles de venta.");
+        }
         return "redirect:/Productos";
     }
 }

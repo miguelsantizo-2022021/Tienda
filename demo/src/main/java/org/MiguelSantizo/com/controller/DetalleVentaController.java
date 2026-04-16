@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import jakarta.servlet.http.HttpSession;
 import java.util.List;
 
-@Controller // Cambiado para manejar vistas HTML
+@Controller
 @RequestMapping("/Detalles")
 public class DetalleVentaController {
 
@@ -24,7 +24,7 @@ public class DetalleVentaController {
 
         List<DetalleVenta> lista = detalleService.getAllDetalles();
         model.addAttribute("listaDetalles", lista);
-        return "detalles"; // Buscará detalles.html en templates
+        return "detalles";
     }
 
     @GetMapping("/eliminar/{id}")

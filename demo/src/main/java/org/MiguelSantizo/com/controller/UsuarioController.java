@@ -2,14 +2,16 @@ package org.MiguelSantizo.com.controller;
 
 import org.MiguelSantizo.com.entity.Usuario;
 import org.MiguelSantizo.com.service.UsuarioService;
-import org.springframework.stereotype.Controller; // CAMBIADO
-import org.springframework.ui.Model; // NECESARIO PARA HTML
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import jakarta.servlet.http.HttpSession;
-import java.util.List;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-@Controller // CAMBIADO: @RestController NO sirve para HTML
-@RequestMapping("/Usuarios") // Ruta para el navegador
+import java.util.List;
+import java.util.stream.Collectors;
+
+@Controller
+@RequestMapping("/Usuarios")
 public class UsuarioController {
 
     private final UsuarioService usuarioService;
@@ -18,23 +20,36 @@ public class UsuarioController {
         this.usuarioService = usuarioService;
     }
 
-    // Método para mostrar la página HTML
     @GetMapping
-    public String listUsuarios(Model model, HttpSession session) {
-        // Protección de sesión
-        if (session.getAttribute("usuarioLogueado") == null) {
-            return "redirect:/Login";
+    public String listar(@RequestParam(required = false) String buscar, Model model) {
+        List<Usuario> usuarios = usuarioService.getAllUsuarios();
+
+        if (buscar != null && !buscar.isEmpty()) {
+            usuarios = usuarios.stream()
+                    .filter(u -> u.getUsername().toLowerCase().contains(buscar.toLowerCase()) ||
+                            u.getEmail().toLowerCase().contains(buscar.toLowerCase()))
+                    .collect(Collectors.toList());
         }
 
-        List<Usuario> lista = usuarioService.getAllUsuarios();
-        model.addAttribute("listaUsuarios", lista);
-        return "usuarios"; // Esto busca usuarios.html
+        model.addAttribute("listaUsuarios", usuarios);
+        model.addAttribute("usuarioObj", new Usuario());
+        return "usuario";
     }
 
-    // Método para eliminar y refrescar la página
+    @PostMapping("/guardar")
+    public String guardar(@ModelAttribute("usuarioObj") Usuario usuario) {
+        usuarioService.saveUsuario(usuario);
+        return "redirect:/Usuarios";
+    }
+
     @GetMapping("/eliminar/{id}")
-    public String delete(@PathVariable Integer id) {
-        usuarioService.deleteUsuario(id);
+    public String eliminar(@PathVariable Integer id, RedirectAttributes redirectAttrs) {
+        try {
+            usuarioService.deleteUsuario(id);
+            redirectAttrs.addFlashAttribute("success", "Usuario eliminado.");
+        } catch (Exception e) {
+            redirectAttrs.addFlashAttribute("error", "No se puede eliminar el usuario.");
+        }
         return "redirect:/Usuarios";
     }
 }
