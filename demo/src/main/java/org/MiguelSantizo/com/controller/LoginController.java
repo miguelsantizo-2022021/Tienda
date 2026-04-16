@@ -29,6 +29,7 @@ public class LoginController {
         Usuario usuario = usuarioService.login(username, password);
         if (usuario != null) {
             session.setAttribute("usuarioLogueado", usuario);
+            session.setAttribute("rolUsuario", usuario.getRol());
             return "redirect:/Home";
         } else {
             model.addAttribute("error", "Usuario o contraseña incorrectos");

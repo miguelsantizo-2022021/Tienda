@@ -1,9 +1,8 @@
 :root {
-    --primary: #112d4c;
-    --secondary: #3f72af;
-    --accent: #dbe2ef;
-    --text: #112d4c;
-    --white: #ffffff;
+    --color-fondo: #f7f9fc;
+    --azul-oscuro: #112d4c;
+    --azul-claro: #3f72af;
+    --blanco-puro: #ffffff;
 }
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -28,7 +27,7 @@ body {
     font-size: 1.5rem;
     font-weight: bold;
 }
-.user-info {
+.InformacionUsuario {
     display: flex;
     align-items: center;
     gap: 20px;
@@ -105,4 +104,12 @@ body {
 }
 .card-btn:hover {
     background-color: var(--primary);
+}
+.foto {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #ffffff;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
 }

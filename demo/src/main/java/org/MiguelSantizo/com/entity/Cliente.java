@@ -14,6 +14,10 @@ public class Cliente {
     private Integer idCliente;
 
     @NotBlank(message = "El nombre del cliente es obligatorio")
+
+    /* length estalece limites/longitud  maxima de los caracteres permitidos
+    en la base de datos */
+
     @Column(name = "nombre_cliente", length = 50)
     private String nombre;
 
@@ -30,7 +34,6 @@ public class Cliente {
 
     public Cliente() {
     }
-
 
     public Integer getIdCliente() {
         return idCliente;

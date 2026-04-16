@@ -33,7 +33,7 @@ public class UsuarioController {
 
         model.addAttribute("listaUsuarios", usuarios);
         model.addAttribute("usuarioObj", new Usuario());
-        return "usuario";
+        return "usuarios";
     }
 
     @PostMapping("/guardar")
