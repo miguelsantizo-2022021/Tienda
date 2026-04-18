@@ -18,6 +18,7 @@ create table Usuarios(
     email varchar(60),
     rol varchar(45),
     estado int,
+    foto_url varchar(500),
     primary key (id_usuario)
 );
 
@@ -58,10 +59,7 @@ create table DetalleVenta(
         references Ventas(id_venta)
 );
 
-
-
 delimiter $$
-
 
 create procedure sp_agregarcliente(in p_nombre varchar(50), in p_apellido varchar(50), in p_direccion varchar(100), in p_estado int)
 begin
@@ -75,7 +73,6 @@ begin
     where id_cliente = p_id;
 end$$
 
-
 create procedure sp_agregarproducto(in p_nombre varchar(60), in p_precio decimal(10,2), in p_stock int, in p_estado int)
 begin
     insert into Productos(nombre_producto, precio, stock, estado) 
@@ -88,18 +85,16 @@ begin
     where id_producto = p_id;
 end$$
 
-
-create procedure sp_agregarusuario(in p_user varchar(45), in p_pass varchar(45), in p_email varchar(60), in p_rol varchar(45), in p_estado int)
+create procedure sp_agregarusuario(in p_user varchar(45), in p_pass varchar(45), in p_email varchar(60), in p_rol varchar(45), in p_estado int, in p_foto varchar(500))
 begin
-    insert into Usuarios(username, password, email, rol, estado) 
-    values (p_user, p_pass, p_email, p_rol, p_estado);
+    insert into Usuarios(username, password, email, rol, estado, foto_url) 
+    values (p_user, p_pass, p_email, p_rol, p_estado, p_foto);
 end$$
 
 create procedure sp_login(in p_user varchar(45), in p_pass varchar(45))
 begin
     select * from Usuarios where username = p_user and password = p_pass and estado = 1;
 end$$
-
 
 create procedure sp_registrarventa(in p_id_cliente int, in p_id_usuario int, in p_total decimal(10,2))
 begin
@@ -118,39 +113,35 @@ end$$
 
 delimiter ;
 
-
--- Clientes
 call sp_agregarcliente('Miguel', 'Santizo', 'Ciudad de Guatemala', 1);
 call sp_agregarcliente('Juan', 'Perez', 'Antigua Guatemala', 1);
 call sp_agregarcliente('Maria', 'Lopez', 'Quetzaltenango', 1);
 call sp_agregarcliente('Carlos', 'Gomez', 'Escuintla', 1);
 call sp_agregarcliente('Ana', 'Martinez', 'Chimaltenango', 1);
 
--- Usuarios
-call sp_agregarusuario('msantizo', 'pass123', 'msantizo@tienda.com', 'ADMIN', 1);
-call sp_agregarusuario('jperez', 'admin2024', 'jperez@tienda.com', 'VENDEDOR', 1);
-call sp_agregarusuario('mlopez', 'secure456', 'mlopez@tienda.com', 'VENDEDOR', 1);
-call sp_agregarusuario('cgomez', 'venta789', 'cgomez@tienda.com', 'VENDEDOR', 1);
-call sp_agregarusuario('amartinez', 'staff321', 'amartinez@tienda.com', 'VENDEDOR', 1);
+call sp_agregarusuario('msantizo', 'pass123', 'msantizo@tienda.com', 'ADMIN', 1, 'https://api.dicebear.com/7.x/avataaars/svg?seed=Felix');
+call sp_agregarusuario('jperez', 'admin2024', 'jperez@tienda.com', 'VENDEDOR', 1, 'https://api.dicebear.com/7.x/avataaars/svg?seed=Aneka');
+call sp_agregarusuario('mlopez', 'secure456', 'mlopez@tienda.com', 'VENDEDOR', 1, 'https://api.dicebear.com/7.x/avataaars/svg?seed=Styles');
+call sp_agregarusuario('cgomez', 'venta789', 'cgomez@tienda.com', 'VENDEDOR', 1, 'https://api.dicebear.com/7.x/avataaars/svg?seed=Buster');
+call sp_agregarusuario('amartinez', 'staff321', 'amartinez@tienda.com', 'VENDEDOR', 1, 'https://api.dicebear.com/7.x/avataaars/svg?seed=Gracie');
 
--- Productos
 call sp_agregarproducto('Laptop Gaming', 12500.00, 20, 1);
 call sp_agregarproducto('Mouse Inalambrico', 150.00, 50, 1);
 call sp_agregarproducto('Teclado Mecanico', 450.00, 30, 1);
 call sp_agregarproducto('Monitor 24 pulgadas', 1800.00, 15, 1);
 call sp_agregarproducto('Audifonos Bluetooth', 350.00, 40, 1);
 
--- Ventas
 call sp_registrarventa(1, 1, 12650.00);
 call sp_registrarventa(2, 2, 450.00);
 call sp_registrarventa(3, 3, 3600.00);
 call sp_registrarventa(4, 4, 350.00);
 call sp_registrarventa(5, 5, 600.00);
 
--- Detalle de Venta
 call sp_agregardetalleventa(1, 12500.00, 1, 1);
 call sp_agregardetalleventa(1, 150.00, 2, 1);
 call sp_agregardetalleventa(1, 450.00, 3, 2);
 call sp_agregardetalleventa(2, 1800.00, 4, 3);
 call sp_agregardetalleventa(1, 350.00, 5, 4);
 call sp_agregardetalleventa(4, 150.00, 2, 5);
+
+select * from Usuarios;
