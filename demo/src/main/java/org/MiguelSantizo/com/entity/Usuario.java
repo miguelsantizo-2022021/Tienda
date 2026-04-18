@@ -35,6 +35,9 @@ public class Usuario {
     @Column(name = "estado")
     private Integer estado;
 
+    @Column(name = "foto_url", length = 500)
+    private String fotoUrl = "https://cdn-icons-png.flaticon.com/512/149/149071.png";
+
     public Usuario() {
     }
 
@@ -50,4 +53,6 @@ public class Usuario {
     public void setRol(String rol) { this.rol = rol; }
     public Integer getEstado() { return estado; }
     public void setEstado(Integer estado) { this.estado = estado; }
+    public String getFotoUrl() { return fotoUrl; }
+    public void setFotoUrl(String fotoUrl) { this.fotoUrl = fotoUrl; }
 }

@@ -39,11 +39,12 @@ public class LoginController {
 
     @GetMapping("/Home")
     public String Home(HttpSession session, Model model) {
-        Usuario usuario = (Usuario) session.getAttribute("usuarioLogueado");
-        if (usuario == null) {
+        Usuario usuarioSesion = (Usuario) session.getAttribute("usuarioLogueado");
+        if (usuarioSesion == null) {
             return "redirect:/Login";
         }
-        model.addAttribute("usuario", usuario);
+        Usuario usuarioDb = usuarioService.getUsuarioById(usuarioSesion.getIdUsuario());
+        model.addAttribute("usuario", usuarioDb);
         return "Home";
     }
 

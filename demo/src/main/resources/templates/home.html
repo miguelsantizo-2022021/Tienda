@@ -12,14 +12,8 @@
         <span class="logo">Tienda Miguel</span>
         <div class="InformacionUsuario">
             <div class="Perfil">
-                <img th:if="${session.rolUsuario == 'ADMIN'}"
-                     th:src="@{/Miguel.jpeg}"
-                     alt="Admin"
-                     class="foto">
-
-                <img th:if="${session.rolUsuario == 'VENDEDOR'}"
-                     th:src="@{/Usuario.jpg}"
-                     alt="Vendedor"
+                <img th:src="${usuario.fotoUrl != null && usuario.fotoUrl != '' ? usuario.fotoUrl : 'https://cdn-icons-png.flaticon.com/512/149/149071.png'}"
+                     alt="Perfil"
                      class="foto">
             </div>
 

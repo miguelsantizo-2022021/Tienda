@@ -28,6 +28,8 @@
         <div class="card">
             <h3 th:text="${usuarioObj.idUsuario != null ? 'Editar Usuario' : 'Nuevo Usuario'}">Mantenimiento</h3>
             <form th:action="@{/Usuarios/guardar}" th:object="${usuarioObj}" method="post" style="display: flex; flex-direction: column; gap: 10px;">
+                <input type="text" th:field="*{fotoUrl}" placeholder="Link de la foto (URL)"
+                       style="padding: 10px; border: 1px solid #ddd; border-radius: 12px; margin-bottom: 10px;">
                 <input type="hidden" th:field="*{idUsuario}">
 
                 <input type="text" th:field="*{username}" placeholder="Username" required style="padding: 10px; border: 1px solid #ddd; border-radius: 5px;">
@@ -64,7 +66,7 @@
             <thead>
             <tr>
                 <th>ID</th>
-                <th>Username</th>
+                <th>Foto</th> <th>Username</th>
                 <th>Email</th>
                 <th>Rol</th>
                 <th>Estado</th>
@@ -74,13 +76,18 @@
             <tbody>
             <tr th:each="u : ${listaUsuarios}">
                 <td th:text="${u.idUsuario}"></td>
+                <td>
+                    <img th:src="${u.fotoUrl != null && u.fotoUrl != '' ? u.fotoUrl : 'https://cdn-icons-png.flaticon.com/512/149/149071.png'}"
+                         class="foto" alt="User"
+                         style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover; border: 2px solid #3f72af;">
+                </td>
                 <td th:text="${u.username}"></td>
                 <td th:text="${u.email}"></td>
                 <td><span class="badge" th:text="${u.rol}" style="background: #3f72af; color: white; padding: 2px 8px; border-radius: 10px; font-size: 0.8rem;"></span></td>
                 <td>
-                    <span th:text="${u.estado == 1 ? 'Activo' : 'Inactivo'}"
-                          th:style="${u.estado == 1 ? 'color: #28a745; font-weight: bold;' : 'color: #e84a5f; font-weight: bold;'}">
-                    </span>
+                <span th:text="${u.estado == 1 ? 'Activo' : 'Inactivo'}"
+                      th:style="${u.estado == 1 ? 'color: #28a745; font-weight: bold;' : 'color: #e84a5f; font-weight: bold;'}">
+                </span>
                 </td>
                 <td>
                     <a th:href="@{/Usuarios/editar/{id}(id=${u.idUsuario})}" class="btn-action btn-edit">

@@ -37,6 +37,7 @@ public class UsuarioServiceImplements implements UsuarioService {
             existente.setEmail(usuario.getEmail());
             existente.setRol(usuario.getRol());
             existente.setEstado(usuario.getEstado());
+            existente.setFotoUrl(usuario.getFotoUrl());
             return usuarioRepository.save(existente);
         }).orElse(null);
     }

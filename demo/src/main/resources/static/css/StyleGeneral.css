@@ -154,3 +154,12 @@ table td {
 
 .btn-edit { background: #3f72af; color: white; }
 .btn-delete { background: #e84a5f; color: white; }
+
+.foto {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #3f72af;
+    background-color: #eee;
+}
