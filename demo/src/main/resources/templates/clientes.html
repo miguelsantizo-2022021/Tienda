@@ -2,29 +2,56 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Clientes - Tienda Miguel</title>
-    <link rel="stylesheet" th:href="@{/css/HomeStyle.css}">
-    <link rel="stylesheet" th:href="@{/css/GeneralStyle.css}">
+    <title>Gestión de Clientes - Tienda Miguel</title>
+    <link rel="stylesheet" th:href="@{/css/StyleGeneral.css}">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
 </head>
 <body>
 
 <nav class="navbar">
     <div class="nav-container">
-        <a th:href="@{/Home}" style="text-decoration: none; color: white;"><span class="logo">Tienda Miguel 🛒</span></a>
-        <div class="user-info">
-            <a th:href="@{/Home}" style="color: white; text-decoration: none; margin-right: 20px;">Volver al Panel</a>
-            <a th:href="@{/logout}" class="btn-logout">Cerrar Sesión</a>
+        <a th:href="@{/Home}" class="logo">
+            <i class="bi bi-cart4"></i> Tienda Miguel
+        </a>
+        <div class="user-actions">
+            <a th:href="@{/logout}" class="btn-logout">
+                <i class="bi bi-box-arrow-right"></i> Cerrar Sesión
+            </a>
         </div>
     </div>
 </nav>
 
-<main class="container" style="max-width: 1100px; margin: 30px auto; padding: 20px;">
-    <div style="display: flex; justify-content: space-between; align-items: center;">
-        <h1>Lista de Clientes</h1>
-        <a th:href="@{/Clientes/nuevo}" class="btn-add">
-            <i class="bi bi-person-plus-fill"></i> Nuevo Cliente
-        </a>
+<main class="main-content">
+    <div class="grid-top">
+        <div class="card">
+            <h3 th:text="${clienteObj.idCliente != null ? 'Editar Cliente' : 'Nuevo Cliente'}">Registro Rápido</h3>
+            <form th:action="@{/Clientes/guardar}" th:object="${clienteObj}" method="post">
+                <input type="hidden" th:field="*{idCliente}">
+
+                <input type="text" th:field="*{nombre}" placeholder="Nombre" required>
+                <input type="text" th:field="*{apellido}" placeholder="Apellido" required>
+                <input type="text" th:field="*{direccion}" placeholder="Dirección">
+
+                <select th:field="*{estado}">
+                    <option value="1">Activo</option>
+                    <option value="0">Inactivo</option>
+                </select>
+
+                <button type="submit" class="btn-add">
+                    <i class="bi bi-check-circle"></i>
+                    <span th:text="${clienteObj.idCliente != null ? ' Actualizar Datos' : ' Guardar Cliente'}"></span>
+                </button>
+            </form>
+        </div>
+
+        <div class="card">
+            <h3><i class="bi bi-search"></i> Filtro de Búsqueda</h3>
+            <form th:action="@{/Clientes}" method="get" style="display: flex; flex-direction: column; justify-content: space-between; height: 180px;">
+                <p style="color: #666; margin: 0;">Busca por nombre o apellido del cliente:</p>
+                <input type="text" name="buscar" placeholder="Escribe aquí..." th:value="${param.buscar}">
+                <button type="submit" class="btn-search">Realizar Búsqueda</button>
+            </form>
+        </div>
     </div>
 
     <div class="table-container">
@@ -32,8 +59,7 @@
             <thead>
             <tr>
                 <th>ID</th>
-                <th>Nombre</th>
-                <th>Apellido</th>
+                <th>Nombre Completo</th>
                 <th>Dirección</th>
                 <th>Estado</th>
                 <th>Acciones</th>
@@ -41,18 +67,23 @@
             </thead>
             <tbody>
             <tr th:each="c : ${clientes}">
-                <td th:text="${c.idCliente}"></td>
-                <td th:text="${c.nombre}"></td>
-                <td th:text="${c.apellido}"></td>
+                <td th:text="${c.idCliente}" style="font-weight: bold; color: #666;"></td>
+                <td>
+                    <span th:text="${c.nombre + ' ' + c.apellido}" style="font-weight: 600;"></span>
+                </td>
                 <td th:text="${c.direccion}"></td>
                 <td>
                         <span th:text="${c.estado == 1 ? 'Activo' : 'Inactivo'}"
-                              th:style="${c.estado == 1 ? 'color: green' : 'color: red'}"></span>
+                              th:style="${c.estado == 1 ? 'color: #28a745; font-weight: bold;' : 'color: #e84a5f; font-weight: bold;'}">
+                        </span>
                 </td>
                 <td>
-                    <a th:href="@{/Clientes/eliminar/{id}(id=${c.idCliente})}"
-                       class="btn-action btn-delete" onclick="return confirm('¿Eliminar?')">
-                        <i class="bi bi-trash-fill"></i>
+                    <a th:href="@{/Clientes/editar/{id}(id=${c.idCliente})}" class="btn-action btn-edit">
+                        <i class="bi bi-pencil-square"></i>
+                    </a>
+                    <a th:href="@{/Clientes/eliminar/{id}(id=${c.idCliente})}" class="btn-action btn-delete"
+                       onclick="return confirm('¿Seguro que deseas eliminar este cliente?')">
+                        <i class="bi bi-trash"></i>
                     </a>
                 </td>
             </tr>
@@ -60,5 +91,6 @@
         </table>
     </div>
 </main>
+
 </body>
 </html>

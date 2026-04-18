@@ -42,6 +42,14 @@ public class ClienteController {
         return "redirect:/Clientes";
     }
 
+    @GetMapping("/editar/{id}")
+    public String editar(@PathVariable Integer id, Model model) {
+        Cliente cliente = clienteService.getClienteById(id);
+        model.addAttribute("clienteObj", cliente);
+        model.addAttribute("clientes", clienteService.getAllClientes());
+        return "clientes";
+    }
+
     @GetMapping("/eliminar/{id}")
     public String eliminar(@PathVariable Integer id, RedirectAttributes redirectAttrs) {
         try {

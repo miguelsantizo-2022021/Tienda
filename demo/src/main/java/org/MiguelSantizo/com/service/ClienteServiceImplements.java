@@ -3,6 +3,7 @@ package org.MiguelSantizo.com.service;
 import org.MiguelSantizo.com.entity.Cliente;
 import org.MiguelSantizo.com.repository.ClienteRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 @Service
@@ -15,21 +16,25 @@ public class ClienteServiceImplements implements ClienteService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<Cliente> getAllClientes() {
         return clienteRepository.findAll();
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Cliente getClienteById(Integer id) {
         return clienteRepository.findById(id).orElse(null);
     }
 
     @Override
+    @Transactional
     public Cliente saveCliente(Cliente cliente) {
         return clienteRepository.save(cliente);
     }
 
     @Override
+    @Transactional
     public Cliente updateCliente(Integer id, Cliente cliente) {
         return clienteRepository.findById(id).map(existente -> {
             existente.setNombre(cliente.getNombre());
@@ -41,6 +46,7 @@ public class ClienteServiceImplements implements ClienteService {
     }
 
     @Override
+    @Transactional
     public boolean deleteCliente(Integer id) {
         if (clienteRepository.existsById(id)) {
             clienteRepository.deleteById(id);
