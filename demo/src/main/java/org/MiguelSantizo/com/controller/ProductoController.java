@@ -41,13 +41,21 @@ public class ProductoController {
         return "redirect:/Productos";
     }
 
+    @GetMapping("/editar/{id}")
+    public String editar(@PathVariable Integer id, Model model) {
+        Producto producto = productoService.getProductoById(id);
+        model.addAttribute("productoObj", producto);
+        model.addAttribute("listaProductos", productoService.getAllProductos());
+        return "productos";
+    }
+
     @GetMapping("/eliminar/{id}")
     public String eliminar(@PathVariable Integer id, RedirectAttributes redirectAttrs) {
         try {
             productoService.deleteProducto(id);
             redirectAttrs.addFlashAttribute("success", "Producto eliminado.");
         } catch (Exception e) {
-            redirectAttrs.addFlashAttribute("error", "No se puede eliminar: El producto está en detalles de venta.");
+            redirectAttrs.addFlashAttribute("error", "No se puede eliminar el producto.");
         }
         return "redirect:/Productos";
     }
