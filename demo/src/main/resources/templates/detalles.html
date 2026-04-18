@@ -2,25 +2,27 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Detalle de Ventas - Tienda Miguel</title>
-    <link rel="stylesheet" th:href="@{/css/HomeStyle.css}">
-    <link rel="stylesheet" th:href="@{/css/GeneralStyle.css}">
+    <title>Detalles de Venta - Tienda Miguel</title>
+    <link rel="stylesheet" th:href="@{/css/StyleGeneral.css}">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
 </head>
 <body>
 
 <nav class="navbar">
     <div class="nav-container">
-        <a th:href="@{/Home}" style="text-decoration: none; color: white;"><span class="logo">Tienda Miguel 🛒</span></a>
-        <div class="user-info">
-            <a th:href="@{/Home}" style="color: white; text-decoration: none; margin-right: 15px;">Volver al Panel</a>
-            <a th:href="@{/logout}" class="btn-logout">Cerrar Sesión</a>
+        <a th:href="@{/Home}" class="logo">
+            <i class="bi bi-cart4"></i> Tienda Miguel
+        </a>
+        <div class="user-actions">
+            <a th:href="@{/logout}" class="btn-logout">
+                <i class="bi bi-box-arrow-right"></i> Cerrar Sesión
+            </a>
         </div>
     </div>
 </nav>
 
-<main class="container" style="max-width: 1200px; margin: 30px auto; padding: 20px;">
-    <h1>Registro de Detalles de Ventas</h1>
+<main style="max-width: 1200px; margin: 30px auto; padding: 0 20px;">
+    <h2 style="color: #112d4c; margin-bottom: 20px;"><i class="bi bi-list-check"></i> Auditoría de Detalles de Ventas</h2>
 
     <div class="table-container">
         <table>
@@ -29,7 +31,7 @@
                 <th>ID Detalle</th>
                 <th>ID Venta</th>
                 <th>Producto</th>
-                <th>Cantidad</th>
+                <th>Cant.</th>
                 <th>Precio Unit.</th>
                 <th>Subtotal</th>
                 <th>Acciones</th>
@@ -37,15 +39,15 @@
             </thead>
             <tbody>
             <tr th:each="d : ${listaDetalles}">
-                <td th:text="${d.idDetalleVenta}"></td>
-                <td th:text="${d.venta != null ? d.venta.idVenta : 'N/A'}"></td>
-                <td th:text="${d.producto != null ? d.producto.nombreProducto : 'Sin Producto'}"></td>
+                <td th:text="${d.idDetalleVenta}" style="font-weight: bold; color: #666;"></td>
+                <td><span class="badge" th:text="'#' + ${d.venta.idVenta}" style="background: #e1e8f0; color: #112d4c; padding: 4px 8px; border-radius: 5px;"></span></td>
+                <td th:text="${d.producto != null ? d.producto.nombreProducto : 'Desconocido'}"></td>
                 <td th:text="${d.cantidad}"></td>
                 <td th:text="'Q' + ${d.precioUnitario}"></td>
-                <td><strong th:text="'Q' + ${d.subtotal}"></strong></td>
+                <td><strong th:text="'Q' + ${d.subtotal}" style="color: #3f72af;"></strong></td>
                 <td>
                     <a th:href="@{/Detalles/eliminar/{id}(id=${d.idDetalleVenta})}"
-                       class="btn-action btn-delete" onclick="return confirm('¿Eliminar detalle?')">
+                       class="btn-action btn-delete" onclick="return confirm('¿Eliminar este renglón del detalle?')">
                         <i class="bi bi-trash-fill"></i>
                     </a>
                 </td>

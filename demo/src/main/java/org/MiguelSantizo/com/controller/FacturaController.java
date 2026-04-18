@@ -2,10 +2,12 @@ package org.MiguelSantizo.com.controller;
 
 import org.MiguelSantizo.com.entity.Producto;
 import org.MiguelSantizo.com.entity.Venta;
+import org.MiguelSantizo.com.entity.DetalleVenta;
 import org.MiguelSantizo.com.entity.Cliente;
 import org.MiguelSantizo.com.service.ProductoService;
 import org.MiguelSantizo.com.service.ClienteService;
 import org.MiguelSantizo.com.service.VentaService;
+import org.MiguelSantizo.com.service.DetalleVentaService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -22,14 +24,16 @@ public class FacturaController {
     private final ProductoService productoService;
     private final ClienteService clienteService;
     private final VentaService ventaService;
-
+    private final DetalleVentaService detalleService;
 
     private List<Producto> carrito = new ArrayList<>();
 
-    public FacturaController(ProductoService productoService, ClienteService clienteService, VentaService ventaService) {
+    public FacturaController(ProductoService productoService, ClienteService clienteService,
+                             VentaService ventaService, DetalleVentaService detalleService) {
         this.productoService = productoService;
         this.clienteService = clienteService;
         this.ventaService = ventaService;
+        this.detalleService = detalleService;
     }
 
     @GetMapping("/nueva")
@@ -37,7 +41,7 @@ public class FacturaController {
         model.addAttribute("clientes", clienteService.getAllClientes());
         model.addAttribute("productos", productoService.getAllProductos());
         model.addAttribute("carrito", carrito);
-        
+
         BigDecimal total = carrito.stream()
                 .map(p -> p.getPrecio())
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
@@ -47,52 +51,41 @@ public class FacturaController {
     }
 
     @PostMapping("/agregar-producto")
-    public String agregarAlCarrito(@RequestParam Integer idProducto, @RequestParam(defaultValue = "1") Integer cantidad) {
+    public String agregarAlCarrito(@RequestParam Integer idProducto) {
         Producto p = productoService.getProductoById(idProducto);
         if (p != null) {
-
-            for (int i = 0; i < cantidad; i++) {
-                carrito.add(p);
-            }
+            carrito.add(p);
         }
-        return "redirect:/Factura/nueva";
-    }
-
-    @PostMapping("/limpiar")
-    public String limpiarCarrito() {
-        carrito.clear();
         return "redirect:/Factura/nueva";
     }
 
     @PostMapping("/finalizar")
     public String guardarVenta(@RequestParam Integer idCliente) {
-        if (carrito.isEmpty()) {
-            return "redirect:/Factura/nueva";
-        }
+        if (carrito.isEmpty()) return "redirect:/Factura/nueva";
 
-        Venta nuevaVenta = new Venta();
-        nuevaVenta.setFechaVenta(LocalDate.now());
-        nuevaVenta.setEstado(1);
-
-        Cliente clienteDb = clienteService.getClienteById(idCliente);
-        nuevaVenta.setCliente(clienteDb);
+        // 1. Crear y guardar la Venta principal
+        Venta venta = new Venta();
+        venta.setFechaVenta(LocalDate.now());
+        venta.setEstado(1);
+        venta.setCliente(clienteService.getClienteById(idCliente));
 
         BigDecimal total = carrito.stream()
                 .map(p -> p.getPrecio())
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
-        nuevaVenta.setTotal(total);
+        venta.setTotal(total);
 
-        ventaService.saveVenta(nuevaVenta);
+        Venta ventaGuardada = ventaService.saveVenta(venta);
 
         for (Producto p : carrito) {
-            if (p.getStock() > 0) {
-                p.setStock(p.getStock() - 1);
-                productoService.saveProducto(p);
-            }
+            DetalleVenta detalle = new DetalleVenta();
+            detalle.setVenta(ventaGuardada);
+            detalle.setProducto(p);
+            detalle.setCantidad(1);
+            detalle.setPrecioUnitario(p.getPrecio());
+            detalleService.saveDetalle(detalle);
         }
 
         carrito.clear();
-
         return "redirect:/Ventas";
     }
 }
