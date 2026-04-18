@@ -42,6 +42,14 @@ public class UsuarioController {
         return "redirect:/Usuarios";
     }
 
+    @GetMapping("/editar/{id}")
+    public String editar(@PathVariable Integer id, Model model) {
+        Usuario usuario = usuarioService.getUsuarioById(id);
+        model.addAttribute("usuarioObj", usuario);
+        model.addAttribute("listaUsuarios", usuarioService.getAllUsuarios());
+        return "usuarios";
+    }
+
     @GetMapping("/eliminar/{id}")
     public String eliminar(@PathVariable Integer id, RedirectAttributes redirectAttrs) {
         try {
